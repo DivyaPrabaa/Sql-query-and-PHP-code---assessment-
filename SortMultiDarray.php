@@ -1,28 +1,20 @@
 <?php
 function sortByKey(array $arr, string $key): array {
-    // Step 1: Find min and max age
-    $min = PHP_INT_MAX;
-    $max = PHP_INT_MIN;
-    
+    $map = [];
     foreach ($arr as $item) {
-        $min = min($min, $item[$key]);
-        $max = max($max, $item[$key]);
+        $k = $item[$key];
+        if (!isset($map[$k])) {
+            $map[$k] = [];
+        }
+        $map[$k][] = $item;
     }
-
-    $range = $max - $min + 1;
-    $buckets = array_fill(0, $range, []);
-
-    foreach ($arr as $item) {
-        $index = $item[$key] - $min;
-        $buckets[$index][] = $item;
-    }
+    ksort($map); 
     $sorted = [];
-    foreach ($buckets as $bucket) {
+    foreach ($map as $bucket) {
         foreach ($bucket as $item) {
             $sorted[] = $item;
         }
     }
-
     return $sorted;
 }
 $students = [
